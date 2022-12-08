@@ -1,0 +1,26 @@
+
+stages:          # List of stages for jobs, and their order of execution
+  - build
+  - package
+
+build-job:       # This job runs in the build stage, which runs first.
+  stage: build
+  image: python:3.11
+  before_script:
+    - python --version
+  script:
+    - echo "Compiling the code..."
+    - pip install pip install django
+    - pip install djangorestframework
+    - pip install psycopg2
+  only:
+      - merge_requests
+      - main
+package:
+    stage: package
+    script:
+        - echo "creating package"
+    artifacts:
+      paths: 
+          - ./*
+      expire_in: 30 days
